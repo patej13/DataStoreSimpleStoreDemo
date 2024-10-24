@@ -12,9 +12,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -70,6 +76,8 @@ fun DataStoreDemo(modifier: Modifier) {
     val store = AppStorage(LocalContext.current)
     val appPrefs = store.appPreferenceFlow.collectAsState(AppPreferences())
     val coroutineScope = rememberCoroutineScope()
+    var usernameTextField by remember { mutableStateOf("") }
+
 
     Column (modifier = Modifier.padding(50.dp)) {
         Text("Values = ${appPrefs.value.userName}, " +
@@ -80,9 +88,19 @@ fun DataStoreDemo(modifier: Modifier) {
                 store.saveHighScore(300)
                 store.saveTheme(true)
             }
-
         }) {
             Text("Save Values")
+        }
+        TextField(
+            value = usernameTextField,
+            onValueChange = {usernameTextField = it}
+        )
+        Button(onClick = {
+            coroutineScope.launch {
+                store.saveUsername(usernameTextField)
+            }
+        }) {
+            Text("Save Textfield")
         }
     }
 }

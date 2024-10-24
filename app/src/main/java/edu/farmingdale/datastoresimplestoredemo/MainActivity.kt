@@ -84,7 +84,7 @@ fun DataStoreDemo(modifier: Modifier) {
                 "${appPrefs.value.highScore}, ${appPrefs.value.darkMode}")
         Button(onClick = {
             coroutineScope.launch {
-                store.saveUsername("flygirl")
+                store.saveUsername(usernameTextField)
                 store.saveHighScore(300)
                 store.saveTheme(true)
             }
@@ -95,13 +95,6 @@ fun DataStoreDemo(modifier: Modifier) {
             value = usernameTextField,
             onValueChange = {usernameTextField = it}
         )
-        Button(onClick = {
-            coroutineScope.launch {
-                store.saveUsername(usernameTextField)
-            }
-        }) {
-            Text("Save Textfield")
-        }
     }
 }
 
